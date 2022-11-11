@@ -1,11 +1,12 @@
 import pygame
 import sys
 from ship import Ship
-
+from home_island import HomeIsland
 
 class AirPower:
     def __init__(self):
         pygame.init()
+        #total size of screen: 1280x640
         self.TILE_SIZE = 64
         self.WINDOW_SIZE = 10 * self.TILE_SIZE
 
@@ -17,7 +18,7 @@ class AirPower:
         self.num_tiles = self.screen_rect.width // self.water_rect.width
 
         self.ship = Ship(self)
-
+        self.home_island = HomeIsland(self)
 
     def _check_events(self):
         for event in pygame.event.get():
@@ -35,7 +36,8 @@ class AirPower:
 
     def _update_screen(self):
         self.draw_background()
-        self.ship.blitme()
+        self.ship.blitme() # make an image of your ship
+        self.home_island.blitme() # create an island surface
         pygame.display.flip()
 
     def run_game(self):
