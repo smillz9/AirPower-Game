@@ -40,9 +40,13 @@ class AirPower:
         self.home_hangar = HomeHangar(self)
         self.enemy_hangar = EnemyHangar(self)
 
+        # Sprite group for home hangar, ship, enemy hangar
         self.gameobjects = pygame.sprite.Group()
-        self.gameobjects.add([self.turret_one, self.turret_two, self.turret_three, self.home_hangar, self.enemy_hangar, self.ship])
+        self.gameobjects.add([self.home_hangar, self.enemy_hangar, self.ship])
+
+        # Sprite group for the turrets
         self.turrets = pygame.sprite.Group()
+        self.turrets.add(self.turret_one, self.turret_two, self.turret_three)
         self.bullets = pygame.sprite.Group()
 
         self.ship_bullet = ShipBullet(self)
@@ -88,32 +92,16 @@ class AirPower:
 
     def bullet_turret_collision(self):
         """respond to when bullets hit the turrets"""
-        self._turret_one()
-        self._turret_two()
-        self._turret_three()
         collisions = pygame.sprite.groupcollide(self.bullets, self.turrets, True, True)
 
         if collisions:
             for turrets in collisions.values():
                 if turrets == self.turret_one:
-                    self.gameobjects.remove(self.turret_one)
+                    self.turrets.remove(self.turret_one)
                 if turrets == self.turret_two:
-                    self.gameobjects.remove(self.turret_two)
+                    self.turrets.remove(self.turret_two)
                 if turrets == self.turret_three:
-                    self.gameobjects.remove(self.turret_three)
-
-    def _turret_one(self):
-        turret_one = TurretOne(self)
-        self.turrets.add(turret_one)
-
-    def _turret_two(self):
-        turret_two = TurretTwo(self)
-        self.turrets.add(turret_two)
-
-    def _turret_three(self):
-        turret_three = TurretThree(self)
-        self.turrets.add(turret_three)
-
+                    self.turrets.remove(self.turret_three)
     def fire_bullet(self):
         """create bullets and add it to group"""
         if len(self.bullets) < 6:
@@ -135,31 +123,30 @@ class AirPower:
 
         self.bullet_turret_collision()
 
-    def _update_screen(self):
-        self.home_island.blitme()  # create an island surface
-        self.enemy_island.blitme()  # create enemy island
-        #self.home_hangar.blitme()  # draw home hangar on screen
-        #self.turret.blitme()  # make an image of a turret on screen
-        #self.ship.blitme()  # make an image of your ship on screen
-        for bullet in self.bullets.sprites():
-            bullet.draw_bullet()
-        pygame.display.flip()
-
     def run_game(self):
         # while loop is used for updating positions of
         clock = pygame.time.Clock()
         while True:
-            self.draw_background()
+
             self._check_events()
+          #
             self.update_bullets()
 
-            self._update_screen()
-
             self.gameobjects.update()
+            self.turrets.update()
+
+            #self.draw_background()
+            self.screen.fill((119, 190, 220))
+            self.home_island.blitme()  # create an island surface
+            self.enemy_island.blitme()  # create enemy island
             self.gameobjects.draw(self.screen)
+            self.turrets.draw(self.screen)
+            for bullet in self.bullets.sprites():
+                bullet.draw_bullet()
+
+            pygame.display.flip()
 
             clock.tick(60)
-            pygame.display.flip()
 
             # the brains of the game
 

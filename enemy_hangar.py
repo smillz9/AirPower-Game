@@ -9,7 +9,7 @@ class EnemyHangar(Sprite):
         self.screen = ap_game.screen
         self.screen_rect = ap_game.screen.get_rect()
         self.health = 100
-        self.healthy_image = pygame.image.load("home_hangar_bay.png")
+        self.healthy_image = pygame.image.load("enemy_hangar.png")
         self.image = self.healthy_image
 
         self.rect = self.image.get_rect()
