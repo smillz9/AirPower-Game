@@ -8,7 +8,7 @@ class TurretOne(Sprite):
         super().__init__()
         self.screen = ap_game.screen
         self.screen_rect = ap_game.screen.get_rect()
-        self.turret_health = 2
+        self.turret_health = 5
 
         # the first turret
         self.image = pygame.image.load("turret.png")
@@ -22,6 +22,8 @@ class TurretOne(Sprite):
     def update(self):
         self.rect.x = self.x
         self.rect.y = self.y
+        if self.turret_health < 5:
+            self.image = pygame.image.load("hurt_turret.png")
 
 
 class TurretTwo(Sprite):
@@ -44,6 +46,8 @@ class TurretTwo(Sprite):
     def update(self):
         self.rect.x = self.x
         self.rect.y = self.y
+        if self.turret_health < 5:
+            self.image = pygame.image.load("hurt_turret.png")
 
 
 class TurretThree(Sprite):
@@ -66,5 +70,7 @@ class TurretThree(Sprite):
     def update(self):
         self.rect.x = self.x
         self.rect.y = self.y
+        if self.turret_health < 5:
+            self.image = pygame.image.load("hurt_turret.png")
 
 
