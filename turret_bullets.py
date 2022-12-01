@@ -2,12 +2,11 @@ import pygame
 from pygame.sprite import Sprite
 
 
-class TurretOneBullet(Sprite):
+class TurretBullet(Sprite):
     """class for bullets fired from 1st turret"""
 
-    def __init__(self, ap_game):
+    def __init__(self, position, vector):
         super().__init__()
-        self.screen = ap_game.screen
 
         # settings
         self.bullet_speed = 15
@@ -16,81 +15,19 @@ class TurretOneBullet(Sprite):
         self.bullet_color = (60, 60, 60)
         self.bullets_allowed = 6
 
-        self.rect = pygame.Rect(0, 0, self.bullet_height, self.bullet_width)
-        self.rect.midright = ap_game.turret_one.rect.midleft
+        self.x_speed = 15*vector[0]
+        self.y_speed = 15*vector[1]
 
-        self.x = float(self.rect.x)
-        self.y = float(self.rect.y)
-
-    def update(self):
-        """move bullet on screen"""
-        self.x -= self.bullet_speed
-        self.y += .4 * self.bullet_speed
-
-        self.rect.x = self.x
-        self.rect.y = self.y
-
-    def draw_bullet(self):
-        """draw bullet on screen"""
-        pygame.draw.rect(self.screen, self.bullet_color, self.rect)
-
-
-class TurretTwoBullet(Sprite):
-    """class for bullets fired from 1st turret"""
-
-    def __init__(self, ap_game):
-        super().__init__()
-        self.screen = ap_game.screen
-
-        # settings
-        self.bullet_speed = 15
-        self.bullet_width = 3
-        self.bullet_height = 15
-        self.bullet_color = (60, 60, 60)
-        self.bullets_allowed = 6
-
-        self.rect = pygame.Rect(0, 0, self.bullet_height, self.bullet_width)
-        self.rect.midright = ap_game.turret_two.rect.midleft
-
-        self.x = float(self.rect.x)
-        self.y = float(self.rect.y)
+        self.image = pygame.surface.Surface((self.bullet_height, self.bullet_width))
+        self.image.fill(self.bullet_color)
+        self.rect = self.image.get_rect()
+        self.rect.center = position
 
     def update(self):
         """move bullet on screen"""
-        self.x -= self.bullet_speed
-        self.rect.x = self.x
+        self.rect.x += self.x_speed
+        self.rect.y += self.y_speed
 
-    def draw_bullet(self):
+    def draw(self, screen):
         """draw bullet on screen"""
-        pygame.draw.rect(self.screen, self.bullet_color, self.rect)
-
-class TurretThreeBullet(Sprite):
-    """class for bullets fired from 1st turret"""
-
-    def __init__(self, ap_game):
-        super().__init__()
-        self.screen = ap_game.screen
-
-        # settings
-        self.bullet_speed = 15
-        self.bullet_width = 3
-        self.bullet_height = 15
-        self.bullet_color = (60, 60, 60)
-        self.bullets_allowed = 6
-
-        self.rect = pygame.Rect(0, 0, self.bullet_height, self.bullet_width)
-        self.rect.midright = ap_game.turret_three.rect.midleft
-
-        self.x = float(self.rect.x)
-        self.y = float(self.rect.y)
-
-    def update(self):
-        """move bullet on screen"""
-        self.x -= self.bullet_speed
-        self.y -= 0.4 * self.bullet_speed
-        self.rect.x = self.x
-        self.rect.y = self.y
-
-    def draw_bullet(self):
-        """draw bullet on screen"""
-        pygame.draw.rect(self.screen, self.bullet_color, self.rect)
+        pygame.draw.rect(screen, self.bullet_color, self.rect)

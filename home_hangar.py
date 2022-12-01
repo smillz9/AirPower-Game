@@ -8,9 +8,9 @@ class HomeHangar(Sprite):
         super().__init__()
         self.screen = ap_game.screen
         self.screen_rect = ap_game.screen.get_rect()
-        self.health = 10
+        self.health = 15
         self.healthy_image = pygame.image.load("home_hangar_bay.png")
-        self.hurt_image = pygame.image.load("turret.png")
+        self.hurt_image = pygame.image.load("hurt_home_hangar.png")
         self.image = self.healthy_image
 
         self.rect = self.image.get_rect()
