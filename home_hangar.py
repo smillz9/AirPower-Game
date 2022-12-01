@@ -8,8 +8,9 @@ class HomeHangar(Sprite):
         super().__init__()
         self.screen = ap_game.screen
         self.screen_rect = ap_game.screen.get_rect()
-        self.health = 100
+        self.health = 10
         self.healthy_image = pygame.image.load("home_hangar_bay.png")
+        self.hurt_image = pygame.image.load("turret.png")
         self.image = self.healthy_image
 
         self.rect = self.image.get_rect()
@@ -23,6 +24,5 @@ class HomeHangar(Sprite):
         self.rect.x = self.x
         self.rect.y = self.y
 
-    # def blitme(self):
-    # """draw hangar bay"""
-    # self.screen.blit(self.image, self.rect)
+    def show_damage(self):
+        self.image = self.hurt_image

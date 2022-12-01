@@ -8,8 +8,9 @@ class EnemyHangar(Sprite):
         super().__init__()
         self.screen = ap_game.screen
         self.screen_rect = ap_game.screen.get_rect()
-        self.health = 10
+        self.health = 12
         self.healthy_image = pygame.image.load("enemy_hangar.png")
+        self.hurt_image = pygame.image.load("turret.png")
         self.image = self.healthy_image
 
         self.rect = self.image.get_rect()
@@ -22,3 +23,6 @@ class EnemyHangar(Sprite):
     def update(self):
         self.rect.x = self.x
         self.rect.y = self.y
+
+    def show_damage(self):
+        self.image = self.hurt_image
