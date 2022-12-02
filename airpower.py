@@ -14,6 +14,7 @@ from turret import Turret
 from turret_bullets import TurretBullet
 from gameover import GameOver
 from pygame import mixer
+from scoreboard import Score
 
 # Received assistance from Riley Haugen for music creation
 mixer.init()
@@ -34,6 +35,7 @@ class AirPower:
         self.water_rect = self.water.get_rect()
         self.screen_rect = self.screen.get_rect()
         self.end = GameOver(self)
+        self.score = Score(self)
 
         self.ship = Ship(self)
         self.ship_two = ShipTwo(self)
@@ -77,6 +79,18 @@ class AirPower:
         self.ship_two_bullet = ShipTwoBullet(self)
 
         self.turret_bullets = pygame.sprite.Group()
+
+        game_title = "Air Power"
+        text_color = (250, 250, 250)
+        bg_color = (0, 0, 0)
+
+        self.font = pygame.font.SysFont('monospace', 40, bold=True, italic=False)
+        self.title_image = self.font.render(game_title, True, text_color, bg_color)
+        self.title_rect = self.title_image.get_rect()
+        self.title_rect.center = (640, 30)
+
+    def display_title(self):
+        self.screen.blit(self.title_image, self.title_rect)
 
     def _check_events(self):
         for event in pygame.event.get():
@@ -340,6 +354,8 @@ class AirPower:
 
             # self.draw_background()
             self.screen.fill((119, 190, 220))
+            self.display_title()
+            # self.score.display_time()
             self.home_island.blitme()  # create an island surface
             self.enemy_island.blitme()  # create enemy island
             self.gameobjects.draw(self.screen)
