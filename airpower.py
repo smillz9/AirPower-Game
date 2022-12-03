@@ -43,6 +43,9 @@ class AirPower:
         self.turret_one = Turret((960, 80))
         self.turret_two = Turret((870, 320))
         self.turret_three = Turret((960, 530))
+        self.turret_four = Turret((1000, 100))
+        self.turret_five = Turret((900, 250))
+        self.turret_six = Turret((900, 480))
 
         self.home_island = HomeIsland(self)  # create home island instance
         self.home_island.move((256, 320))  # set location for home island
@@ -70,7 +73,8 @@ class AirPower:
         self.player_two.add([self.ship_two])
         # Sprite group for the turrets
         self.turrets = pygame.sprite.Group()
-        self.turrets.add([self.turret_one, self.turret_two, self.turret_three])
+        self.turrets.add(
+            [self.turret_one, self.turret_two, self.turret_three, self.turret_four, self.turret_five, self.turret_six])
 
         self.bullets = pygame.sprite.Group()
         self.ship_bullet = ShipBullet(self)
@@ -89,8 +93,41 @@ class AirPower:
         self.title_rect = self.title_image.get_rect()
         self.title_rect.center = (640, 30)
 
+    def show_shipone_health(self, health):
+        self.font_two = pygame.font.SysFont('monospace', 20, bold=True, italic=False)
+        self.txt = f"Player One Health: {health}"
+        self.screen_txt = self.font_two.render(self.txt, True, [255, 255, 255], [0, 0, 0])
+        self.screen.blit(self.screen_txt, [20, 600])
+
+    def show_shiptwo_health(self, health):
+        self.font_two = pygame.font.SysFont('monospace', 20, bold=True, italic=False)
+        self.txt = f"Player Two Health: {health}"
+        self.screen_txt = self.font_two.render(self.txt, True, [255, 255, 255], [0, 0, 0])
+        self.screen.blit(self.screen_txt, [300, 600])
+
+    def show_home_hangar_health(self, health):
+        self.font_two = pygame.font.SysFont('monospace', 20, bold=True, italic=False)
+        self.txt = f"Home Hangar Health: {health}"
+        self.screen_txt = self.font_two.render(self.txt, True, [255, 255, 255], [0, 0, 0])
+        self.screen.blit(self.screen_txt, [600, 600])
+
+    def show_enemyhangar_health(self, health):
+        self.font_two = pygame.font.SysFont('monospace', 20, bold=True, italic=False)
+        self.txt = f"Enemy Hangar Health: {health}"
+        self.screen_txt = self.font_two.render(self.txt, True, [255, 255, 255], [0, 0, 0])
+        self.screen.blit(self.screen_txt, [900, 600])
+
     def display_title(self):
         self.screen.blit(self.title_image, self.title_rect)
+
+    def draw_clock(self, seconds):
+        self.output_str = f"Time: {seconds}"
+        self.win_str = f"You Won In: {seconds} seconds! Can You Do Faster?"
+        self.lose_str = f"You Survived {seconds} seconds! Can You Beat That Next Time?"
+        txt = self.font.render(self.output_str, True, [255, 255, 255])
+        self.win_txt = self.font.render(self.win_str, True, [0, 0, 0])
+        self.lose_txt = self.font.render(self.lose_str, True, [0, 0, 0])
+        self.screen.blit(txt, [50, 30])
 
     def _check_events(self):
         for event in pygame.event.get():
@@ -327,6 +364,24 @@ class AirPower:
                 if turret == self.turret_three:
                     new_bullet = TurretBullet(turret.rect.midleft, (-0.944, -0.331))
                     self.turret_bullets.add(new_bullet)
+        num = random.randint(0, 1000)
+        if num < 5:
+            for turret in self.turrets:
+                if turret == self.turret_four:
+                    new_bullet = TurretBullet(turret.rect.midleft, (-0.944, 0.331))
+                    self.turret_bullets.add(new_bullet)
+        num = random.randint(0, 1000)
+        if num < 5:
+            for turret in self.turrets:
+                if turret == self.turret_five:
+                    new_bullet = TurretBullet(turret.rect.midleft, (-1, 0))
+                    self.turret_bullets.add(new_bullet)
+        num = random.randint(0, 1000)
+        if num < 5:
+            for turret in self.turrets:
+                if turret == self.turret_six:
+                    new_bullet = TurretBullet(turret.rect.midleft, (-1, 0))
+                    self.turret_bullets.add(new_bullet)
 
     def update_turret_bullets(self):
         self.turret_bullets.update()
@@ -341,6 +396,8 @@ class AirPower:
     def run_game(self):
         # while loop is used for updating positions of
         clock = pygame.time.Clock()
+        frame_index = 0
+        self.over = False
         while True:
 
             self._check_events()
@@ -355,7 +412,12 @@ class AirPower:
             # self.draw_background()
             self.screen.fill((119, 190, 220))
             self.display_title()
-            # self.score.display_time()
+            self.draw_clock(frame_index // 60)
+            self.show_shipone_health(self.ship.health)
+            self.show_shiptwo_health(self.ship_two.health)
+            self.show_home_hangar_health(self.home_hangar.health)
+            self.show_enemyhangar_health(self.enemy_hangar.health)
+
             self.home_island.blitme()  # create an island surface
             self.enemy_island.blitme()  # create enemy island
             self.gameobjects.draw(self.screen)
@@ -371,13 +433,21 @@ class AirPower:
                 bullet.draw(self.screen)
             if self.ship not in self.player_one and self.ship_two not in self.player_two:
                 self.end.display_lose_message()
+                self.over = True
+                self.screen.blit(self.lose_txt, [10, 30])
             if self.home_hangar not in self.gameobjects:
                 self.end.display_lose_message()
+                self.over = True
+                self.screen.blit(self.lose_txt, [10, 30])
             if self.enemy_hangar not in self.enemy_base:
                 self.end.display_win_message()
+                self.over = True
+                self.screen.blit(self.win_txt, [100, 30])
             pygame.display.flip()
 
             clock.tick(60)
+            if not self.over:
+                frame_index += 1
 
             # the brains of the game
 

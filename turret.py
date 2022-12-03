@@ -9,7 +9,7 @@ class Turret(Sprite):
 
     def __init__(self, position):
         super().__init__()
-        self.turret_health = 15
+        self.turret_health = 25
 
         # the first turret
         self.image = pygame.image.load("turret.png")
