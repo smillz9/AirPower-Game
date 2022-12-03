@@ -127,7 +127,7 @@ class AirPower:
         txt = self.font.render(self.output_str, True, [255, 255, 255])
         self.win_txt = self.font.render(self.win_str, True, [0, 0, 0])
         self.lose_txt = self.font.render(self.lose_str, True, [0, 0, 0])
-        self.screen.blit(txt, [50, 30])
+        self.screen.blit(txt, [175, 30])
 
     def _check_events(self):
         for event in pygame.event.get():
@@ -412,7 +412,7 @@ class AirPower:
             # self.draw_background()
             self.screen.fill((119, 190, 220))
             self.display_title()
-            self.draw_clock(frame_index // 60)
+            self.draw_clock(frame_index // 30)
             self.show_shipone_health(self.ship.health)
             self.show_shiptwo_health(self.ship_two.health)
             self.show_home_hangar_health(self.home_hangar.health)
@@ -420,10 +420,10 @@ class AirPower:
 
             self.home_island.blitme()  # create an island surface
             self.enemy_island.blitme()  # create enemy island
-            self.gameobjects.draw(self.screen)
             if self.enemy_hangar in self.enemy_base:
                 self.enemy_base.draw(self.screen)
             self.turrets.draw(self.screen)
+            self.gameobjects.draw(self.screen)
             self.turret_bullets.draw(self.screen)
             for bullet in self.bullets.sprites():
                 bullet.draw_bullet()

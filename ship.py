@@ -10,7 +10,7 @@ class Ship(Sprite):
         self.screen_rect = ap_game.screen.get_rect()
         self.health = 10
         self.ship_speed = 15
-        self.healthy_image = pygame.image.load("navy_ship.png")
+        self.healthy_image = pygame.image.load("new_player_one.png")
 
         self.image = self.healthy_image
         self.rect = self.image.get_rect()
