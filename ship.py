@@ -27,7 +27,7 @@ class Ship(Sprite):
         self.moving_down = False
 
     def update(self):
-        if self.moving_right and self.rect.right < self.screen_rect.right:
+        if self.moving_right and self.rect.right < self.screen_rect.right/2:
             self.x += self.ship_speed
         if self.moving_left and self.rect.left > 0:
             self.x -= self.ship_speed

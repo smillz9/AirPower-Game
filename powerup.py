@@ -1,17 +1,14 @@
-import random
-
 import pygame
 from pygame.sprite import Sprite
 
 
-class Turret(Sprite):
+class Powerup(Sprite):
 
     def __init__(self, position):
         super().__init__()
-        self.turret_health = 75
 
         # the first turret
-        self.image = pygame.image.load("turret.png")
+        self.image = pygame.image.load("powerup.png")
         self.rect = self.image.get_rect()
         self.rect.center = position
 
@@ -19,11 +16,7 @@ class Turret(Sprite):
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
 
-    def show_damage(self):
-        self.image = pygame.image.load("hurt_turret.png")
-
     def update(self):
         self.rect.x = self.x
         self.rect.y = self.y
-
 

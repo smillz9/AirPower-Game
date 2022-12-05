@@ -15,6 +15,8 @@ from turret_bullets import TurretBullet
 from gameover import GameOver
 from pygame import mixer
 from scoreboard import Score
+from boundary import Boundary
+from powerup import Powerup
 
 # Received assistance from Riley Haugen for music creation
 mixer.init()
@@ -46,6 +48,8 @@ class AirPower:
         self.turret_four = Turret((1000, 100))
         self.turret_five = Turret((900, 250))
         self.turret_six = Turret((900, 480))
+        self.turret_seven = Turret((900, 360))
+        self.turret_eight = Turret((830, 500))
 
         self.home_island = HomeIsland(self)  # create home island instance
         self.home_island.move((256, 320))  # set location for home island
@@ -56,9 +60,15 @@ class AirPower:
         self.home_hangar = HomeHangar(self)  # create home hangar instance
         self.enemy_hangar = EnemyHangar(self)  # create enemy hangar instance
 
+        self.powerup = Powerup((250, 150))
+        self.powerup_two = Powerup((250, 500))
+
         # Sprite group for home hangar, ship, enemy hangar
         self.gameobjects = pygame.sprite.Group()
-        self.gameobjects.add([self.home_hangar, self.ship, self.ship_two])
+        self.gameobjects.add([self.home_hangar, self.ship, self.ship_two, self.powerup, self.powerup_two])
+
+        self.powerups = pygame.sprite.Group()
+        self.powerups.add([self.powerup, self.powerup_two])
 
         self.enemy_base = pygame.sprite.Group()
         self.enemy_base.add([self.enemy_hangar])
@@ -74,7 +84,8 @@ class AirPower:
         # Sprite group for the turrets
         self.turrets = pygame.sprite.Group()
         self.turrets.add(
-            [self.turret_one, self.turret_two, self.turret_three, self.turret_four, self.turret_five, self.turret_six])
+            [self.turret_one, self.turret_two, self.turret_three, self.turret_four, self.turret_five, self.turret_six,
+             self.turret_seven, self.turret_eight])
 
         self.bullets = pygame.sprite.Group()
         self.ship_bullet = ShipBullet(self)
@@ -92,6 +103,8 @@ class AirPower:
         self.title_image = self.font.render(game_title, True, text_color, bg_color)
         self.title_rect = self.title_image.get_rect()
         self.title_rect.center = (640, 30)
+
+        self.boundary = Boundary(self)
 
     def show_shipone_health(self, health):
         self.font_two = pygame.font.SysFont('monospace', 20, bold=True, italic=False)
@@ -283,6 +296,30 @@ class AirPower:
                     self.home_base.remove(x)
                     self.gameobjects.remove(x)
 
+    def ship_powerup_collision(self):
+        collisions = pygame.sprite.groupcollide(self.powerups, self.player_one, True, False)
+        if len(collisions) > 0:
+            print(collisions)
+            hit_ship = []
+            for hits_list in collisions.values():
+                hit_ship += hits_list
+            for ship in hit_ship:
+                if ship.health == 1:
+                    ship.health += 9
+                    self.gameobjects.remove(self.powerup)
+
+    def shiptwo_powerup_collision(self):
+        collisions = pygame.sprite.groupcollide(self.powerups, self.player_two, True, False)
+        if len(collisions) > 0:
+            print(collisions)
+            hit_ship = []
+            for hits_list in collisions.values():
+                hit_ship += hits_list
+            for ship in hit_ship:
+                if ship.health == 1:
+                    ship.health += 9
+                    self.gameobjects.remove(self.powerup)
+
     def bullet_ship_collision(self):
         collisions = pygame.sprite.groupcollide(self.turret_bullets, self.player_one, True, False)
 
@@ -382,6 +419,18 @@ class AirPower:
                 if turret == self.turret_six:
                     new_bullet = TurretBullet(turret.rect.midleft, (-1, 0))
                     self.turret_bullets.add(new_bullet)
+        num = random.randint(0, 1000)
+        if num < 5:
+            for turret in self.turrets:
+                if turret == self.turret_seven:
+                    new_bullet = TurretBullet(turret.rect.midleft, (-1, 0))
+                    self.turret_bullets.add(new_bullet)
+        num = random.randint(0, 1000)
+        if num < 5:
+            for turret in self.turrets:
+                if turret == self.turret_eight:
+                    new_bullet = TurretBullet(turret.rect.midleft, (-1, 0))
+                    self.turret_bullets.add(new_bullet)
 
     def update_turret_bullets(self):
         self.turret_bullets.update()
@@ -411,6 +460,7 @@ class AirPower:
 
             # self.draw_background()
             self.screen.fill((119, 190, 220))
+            self.boundary.draw_boundary()
             self.display_title()
             self.draw_clock(frame_index // 30)
             self.show_shipone_health(self.ship.health)
@@ -420,6 +470,8 @@ class AirPower:
 
             self.home_island.blitme()  # create an island surface
             self.enemy_island.blitme()  # create enemy island
+            self.ship_powerup_collision()
+            self.shiptwo_powerup_collision()
             if self.enemy_hangar in self.enemy_base:
                 self.enemy_base.draw(self.screen)
             self.turrets.draw(self.screen)
