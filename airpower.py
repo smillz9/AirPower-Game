@@ -50,6 +50,7 @@ class AirPower:
         self.turret_six = Turret((900, 480))
         self.turret_seven = Turret((900, 360))
         self.turret_eight = Turret((830, 500))
+        self.turret_nine = Turret((830, 280))
 
         self.home_island = HomeIsland(self)  # create home island instance
         self.home_island.move((256, 320))  # set location for home island
@@ -85,7 +86,7 @@ class AirPower:
         self.turrets = pygame.sprite.Group()
         self.turrets.add(
             [self.turret_one, self.turret_two, self.turret_three, self.turret_four, self.turret_five, self.turret_six,
-             self.turret_seven, self.turret_eight])
+             self.turret_seven, self.turret_eight, self.turret_nine])
 
         self.bullets = pygame.sprite.Group()
         self.ship_bullet = ShipBullet(self)
@@ -429,6 +430,12 @@ class AirPower:
         if num < 5:
             for turret in self.turrets:
                 if turret == self.turret_eight:
+                    new_bullet = TurretBullet(turret.rect.midleft, (-1, 0))
+                    self.turret_bullets.add(new_bullet)
+        num = random.randint(0, 1000)
+        if num < 5:
+            for turret in self.turrets:
+                if turret == self.turret_nine:
                     new_bullet = TurretBullet(turret.rect.midleft, (-1, 0))
                     self.turret_bullets.add(new_bullet)
 

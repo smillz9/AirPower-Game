@@ -8,7 +8,7 @@ class ShipTwo(Sprite):
         super().__init__()
         self.screen = ap_game.screen
         self.screen_rect = ap_game.screen.get_rect()
-        self.health = 10
+        self.health = 5
         self.ship_speed = 15
         self.healthy_image = pygame.image.load("player_two.png")
 
